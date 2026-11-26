@@ -6,10 +6,10 @@
 <meta charset="utf-8">
 <style>
 /* Layout: слева карточка руководителя и знания, справа разговор; на телефоне разговор первым */
-:root{--bg:#f3f5f1;--card:#ffffff;--fg:#1b211a;--mut:#5f6b5c;--line:#d9dfd5;--acc:#3c8a00;--acc-soft:#e4f3d3;--me:#1f2a1c;--me-fg:#f4f8ef;
+:root{--bg:#f3f5f1;--card:#ffffff;--fg:#1b211a;--mut:#5f6b5c;--line:#d9dfd5;--acc:#3c8a00;--acc-soft:#e4f3d3;--me:#1f2a1c;--me-fg:#f4f8ef;--glow:#e4e0f6;
 --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;--glow:#2a2742;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;--glow:#2a2742;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--font);padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:1080px;margin:0 auto;display:grid;gap:16px;grid-template-columns:minmax(0,340px) minmax(0,1fr)}
@@ -74,6 +74,34 @@ h1,.stat b,.chead h2{font-family:"Unbounded","Manrope",var(--font)}
 .chips button{border-radius:10px;text-align:left;padding:8px 10px;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
 .chips button small{color:var(--mut);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;pointer-events:none}
 .chips button span{pointer-events:none}
+/* Версия 3: живой портрет, колода карточек, настроение, круассаны */
+body{background:radial-gradient(900px 520px at 8% -10%,var(--acc-soft),transparent 62%),radial-gradient(760px 460px at 100% 0,var(--glow),transparent 62%),var(--bg);background-attachment:fixed;min-height:100vh}
+.card{border-radius:18px;box-shadow:0 10px 28px -18px rgba(0,0,0,.45)}
+.hero{background:linear-gradient(115deg,var(--acc-soft),var(--glow) 58%,var(--card))}
+.hero .ava{width:148px!important;height:148px!important}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+#ava ellipse[rx="2.3"]{animation:blink 4.5s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,46%,50%,100%{transform:scaleY(1)}48%{transform:scaleY(.1)}}
+#ava.talk path[stroke="#b5483f"]{animation:talk .26s infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes talk{to{transform:scaleY(2.6)}}
+#ava.talk{box-shadow:0 0 0 4px var(--card),0 0 0 6px var(--acc),0 0 0 14px var(--acc-soft)!important}
+.on i{animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--acc)}70%,100%{box-shadow:0 0 0 7px transparent}}
+.deck{background:var(--acc);color:var(--card);border:0}
+.deck h2,.deck .sit{color:var(--card);opacity:.85}
+.sit{font-size:13px;margin-bottom:6px}
+.quote.big{font-family:"Unbounded","Manrope",var(--font);font-size:19px;line-height:1.3;font-weight:600;min-height:3.9em}
+.quote.big.flip{animation:flip .35s ease-out}
+@keyframes flip{from{opacity:0;transform:rotateX(70deg)}}
+.btn{margin-top:12px;border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--card);color:var(--fg)}
+.btn.g{background:var(--acc);color:var(--card)}
+.btn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.bar{height:12px;border-radius:99px;background:var(--bg);overflow:hidden;border:1px solid var(--line);margin-bottom:8px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .5s}
+ul.kb{flex-direction:row;flex-wrap:wrap;gap:6px}
+ul.kb li{min-width:0}
+ul.kb button{width:auto;border:1px solid var(--line);border-radius:99px;padding:6px 11px;font-size:13px}
+@media (prefers-reduced-motion:reduce){#ava ellipse,#ava path,.on i,.quote.big.flip{animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Unbounded:wght@600;700&display=swap">
 
@@ -81,7 +109,7 @@ h1,.stat b,.chead h2{font-family:"Unbounded","Manrope",var(--font)}
   <div class="side">
     <div class="card hero">
       <div class="who">
-        <svg class="ava" viewBox="0 0 100 100" role="img" aria-label="Мультяшный портрет Татьяны Викторовны" style="width:84px;height:84px;padding:0;overflow:hidden;background:#dfe7ea">
+        <svg class="ava" id="ava" viewBox="0 0 100 100" role="img" aria-label="Мультяшный портрет Татьяны Викторовны" style="width:84px;height:84px;padding:0;overflow:hidden;background:#dfe7ea">
           <defs><clipPath id="avc"><circle cx="50" cy="50" r="50"/></clipPath></defs>
           <g clip-path="url(#avc)">
             <rect width="100" height="100" fill="#e3eaed"/>
@@ -115,10 +143,11 @@ h1,.stat b,.chead h2{font-family:"Unbounded","Manrope",var(--font)}
         <div class="stat"><b>№ 5</b><span>команда, хакатон КСУД</span></div>
       </div>
     </div>
-    <div class="card"><h2>Слово руководителя на сегодня</h2><p class="quote" id="quote"></p></div>
+    <div class="card deck"><h2>Карточка ситуации</h2><div class="sit" id="dsit"></div><p class="quote big" id="quote"></p><button type="button" class="btn" id="next">Следующая карточка</button></div>
+    <div class="card"><h2>Настроение оригинала</h2><div class="bar"><i id="mood"></i></div><p class="role" id="moodx" style="margin:0"></p><button type="button" class="btn g" id="cro">Угостить круассаном</button> <span class="role" id="crn"></span></div>
     <div class="card"><h2>Счётчик «готово?»</h2><p class="quote"><b id="cnt" style="font-variant-numeric:tabular-nums">0</b> <span class="role" id="cntx"></span></p></div>
     <div class="card"><h2>Что я знаю о проекте</h2><ul class="kb" id="kb"></ul></div>
-    <div class="card"><h2>Ваши задачи недели</h2><ul class="tasks" id="tasks"></ul></div>
+    <div class="card"><h2>Ваши задачи недели</h2><div class="bar"><i id="tp"></i></div><ul class="tasks" id="tasks"></ul></div>
     <p class="note">Шуточное демо на учебных данных, сделано с уважением. Это цифровая копия: её ответы не являются позицией настоящей Татьяны Викторовны. Фразы в кавычках взяты из юбилейных карточек команды. Разговор остаётся в вашем браузере.</p>
   </div>
 
@@ -163,7 +192,10 @@ const allKB=()=>KB0.concat(S.kb);
 const stems=s=>(s.toLowerCase().match(/[a-zа-яё0-9]{3,}/g)||[]).map(w=>w.slice(0,5));
 
 function renderSide(){
-  $("quote").textContent=MOT[new Date().getDate()%MOT.length];
+  const md=Math.max(0,Math.min(100,S.mood==null?70:S.mood));$("mood").style.width=md+"%";
+  $("moodx").textContent=md+"% — "+(md<30?"«А Баба-Яга против»":md<=70?"«Черепаха — да!»":"«Комон, бэйби, детки — конфетки»");
+  $("crn").textContent=S.cr?"принято круассанов: "+S.cr:"";
+  $("tp").style.width=Math.round(S.tasks.filter(x=>x.done).length/S.tasks.length*100)+"%";
   const c=S.ready||0;$("cnt").textContent=c;$("cntx").textContent=c>=5?"раз. Дедупликацию не проходит":c?"раз вы спросили о статусе":"раз. Спросите меня «готово?»";
   $("kb").innerHTML=allKB().map((k,i)=>`<li><button type="button" data-i="${i}">${esc(k.t)}</button></li>`).join("");
   $("tasks").innerHTML=S.tasks.map((t,i)=>`<li><label><input type="checkbox" id="t${i}" data-i="${i}" ${t.done?"checked":""}><span class="${t.done?"done":""}">${esc(t.t)}</span><span class="d">${esc(t.d)}</span></label></li>`).join("");
@@ -208,7 +240,7 @@ function answer(q){
     return "<b>На этой неделе за вами:</b>\n"+open.map((x,i)=>(i+1)+". "+esc(x.t)+" — срок: "+esc(x.d)).join("\n")+"\n\nЗакрыто: "+dn+" из "+S.tasks.length+". Начните с первой.";
   }
   if(/готово|статус|ид[её]т\?|ну что там|как там/.test(t)){
-    S.ready=(S.ready||0)+1;save();renderSide();
+    S.ready=(S.ready||0)+1;S.mood=Math.max(0,(S.mood==null?70:S.mood)-10);save();renderSide();
     if(S.ready>=5)return "Дубликат запроса. Один и тот же вопрос о статусе — "+S.ready+" раз. Дедупликацию не проходит.\n\nКоллега, оно будет готово быстрее, если не спрашивать.";
     return ["Почти. Это «почти» в терминах релиза: от пяти минут до квартала.","В работе на 90%. Остались последние 90%.","Готово будет тогда, когда согласует владелец данных. То есть скоро. Наверное.","Статус: зелёный. Мелким шрифтом: с оттенком жёлтого."][S.ready-1];
   }
@@ -234,12 +266,18 @@ function answer(q){
   if(k)return "<b>"+esc(k.t)+"</b>\n"+esc(k.x);
   return "Этого в моей базе пока нет — выдумывать не буду. Расскажите мне: напишите «Запомни: …», и дальше я буду отвечать этим всей команде.\n\nА пока могу погрузить в проект, напомнить задачи или поддержать.";
 }
-function ask(q){q=q.trim();if(!q)return;say(esc(q),"u");const a=answer(q);const t=document.createElement("div");t.className="m a typing";t.textContent="Татьяна Викторовна печатает…";$("log").appendChild(t);$("log").scrollTop=$("log").scrollHeight;setTimeout(()=>{t.remove();say(a)},450)}
+function ask(q){q=q.trim();if(!q)return;say(esc(q),"u");const a=answer(q);const t=document.createElement("div");t.className="m a typing";t.textContent="Татьяна Викторовна печатает…";$("log").appendChild(t);$("log").scrollTop=$("log").scrollHeight;$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2600);setTimeout(()=>{t.remove();say(a)},450)}
+const DECK=[["Задорное приветствие","«Здрасьте, забор покрасьте»"],["Выход из отпуска","«Комон, бэйби, детки — конфетки»"],["Когда не согласна с предложением","«А Баба-Яга против»"],["Согласие с чем-то медленным и упорным","«Черепаха — да!»"],["Когда кто-то переживает не в ту сторону","«Сиди, бобёр»"],["Когда от неё чего-то хотят","«Принимаю круассанами»"],["Задача сложная, но очень хочется","«И на ёлку залезть, и не поцарапаться»"],["Когда наконец поняли задачу","«Дошло до утки на вторые сутки»"],["Стоп-слово: пора заканчивать","«Изабелла»"],["Комплимент высшей степени умиления","«Дидюка барбидонская»"],["Когда прощается","«Целую крепко. Ваша репка»"]];
+let di=new Date().getMinutes()%DECK.length;
+function deck(){$("dsit").textContent=DECK[di][0];const q=$("quote");q.textContent=DECK[di][1];q.classList.remove("flip");void q.offsetWidth;q.classList.add("flip")}
+$("next").addEventListener("click",()=>{di=(di+1)%DECK.length;deck();speak(DECK[di][1])});
+$("cro").addEventListener("click",()=>{S.cr=(S.cr||0)+1;S.mood=Math.min(100,(S.mood==null?70:S.mood)+10);save();renderSide();$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2000);say("«Принимаю круассанами».\n\nПринято: "+S.cr+" шт. Согласование ускорено на "+S.cr*3+"%. Настроение оригинала растёт.")});
+deck();
 $("voice").addEventListener("click",e=>{VOICE=!VOICE;e.target.setAttribute("aria-pressed",VOICE);e.target.textContent="Голос: "+(VOICE?"вкл":"выкл");if(VOICE)speak("Здрасьте, забор покрасьте!");else try{speechSynthesis.cancel()}catch(x){}});
 
 $("f").addEventListener("submit",e=>{e.preventDefault();ask($("q").value);$("q").value=""});
 $("kb").addEventListener("click",e=>{const b=e.target.closest("button");if(b){const k=allKB()[+b.dataset.i];say(esc(k.t),"u");say("<b>"+esc(k.t)+"</b>\n"+esc(k.x))}});
-$("tasks").addEventListener("change",e=>{const i=+e.target.dataset.i;S.tasks[i].done=e.target.checked;save();renderSide();if(e.target.checked)say("Вижу, закрыли: «"+esc(S.tasks[i].t)+"». Отлично, так держать.")});
+$("tasks").addEventListener("change",e=>{const i=+e.target.dataset.i;S.tasks[i].done=e.target.checked;if(e.target.checked)S.mood=Math.min(100,(S.mood==null?70:S.mood)+10);save();renderSide();if(e.target.checked)say("Вижу, закрыли: «"+esc(S.tasks[i].t)+"». Отлично, так держать.")});
 const CH=["Здрасьте!","У меня есть идея","Я переживаю","Задача сложная","Всё, я понял","Готово?","Как я работаю?","Покажите мой паспорт данных","Погрузите меня в проект","Что мне делать на этой неделе?","Я устал, не успеваю","Можно в отпуск?","А будет премия?","Нужно ли совещание?","Расскажите анекдот","Запомни: демо релиза в пятницу в 15:00"];
 const SIT={"Здрасьте!":"Приветствие","У меня есть идея":"Когда есть идея","Я переживаю":"Когда тревожно","Задача сложная":"Когда сложно","Всё, я понял":"Когда дошло","Готово?":"Статус","Как я работаю?":"Отчёт о качестве","Покажите мой паспорт данных":"Каталог данных","Погрузите меня в проект":"Новичку","Что мне делать на этой неделе?":"Задачи","Я устал, не успеваю":"Поддержка","Можно в отпуск?":"Отпуск","А будет премия?":"Финансы","Нужно ли совещание?":"Совещания","Расскажите анекдот":"Юмор"};
 $("chips").innerHTML=CH.map(c=>`<button type="button" data-q="${esc(c)}"><small>${esc(SIT[c]||"Память")}</small><span>${esc(c)}</span></button>`).join("");
