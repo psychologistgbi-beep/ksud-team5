@@ -143,7 +143,7 @@ ul.kb button{width:auto;border:1px solid var(--line);border-radius:99px;padding:
           <div class="on"><i></i>на связи 24/7, без выходных, отпуска и обеда</div>
         </div>
       </div>
-      <div class="pet">
+      <div class="pet" style="display:none">
         <h2 style="margin:0">Карманный руководитель: следите за показателями</h2>
         <div class="need"><span>Сытость</span><div class="bar"><i id="bf"></i></div><b id="nf"></b></div>
         <div class="need"><span>Терпение</span><div class="bar"><i id="bp"></i></div><b id="np"></b></div>
@@ -209,7 +209,6 @@ function renderSide(){
   pet("f",0);const P=S.pet;for(const k of ["f","p","v"]){const v=Math.round(P[k]);$("b"+k).style.width=v+"%";$("b"+k).className=v<25?"low":"";$("n"+k).textContent=v+"%"}
   const md=(P.f+P.p+P.v)/3;
   $("moodx").textContent="Состояние: "+(md<30?"«А Баба-Яга против». Срочно спасайте":md<=65?"«Черепаха — да!» Держится":"«Комон, бэйби, детки — конфетки». Довольна");
-  $("ava").style.filter=md<30?"grayscale(.85)":md<=65?"saturate(.8)":"";
   const mo=document.querySelector('#ava path[stroke="#b5483f"]');if(mo)mo.setAttribute("d",md<30?"M43 62q7-5 15 0":md<=65?"M44 60h13":"M43 59q7 5 15-1");
   $("crn").textContent=S.cr?"круассанов принято: "+S.cr:"";
   $("tp").style.width=Math.round(S.tasks.filter(x=>x.done).length/S.tasks.length*100)+"%";
@@ -301,7 +300,6 @@ deck();
 $("rep").addEventListener("click",()=>{pet("p",25);save();renderSide();say("«Черепаха — да!»\n\nОтчёт принят вовремя. Терпение восстановлено. Так можно было с самого начала.")});
 $("cls").addEventListener("click",()=>{const i=S.tasks.findIndex(x=>!x.done);if(i<0){S.tasks.forEach(x=>x.done=false);save();renderSide();say("Все задачи были закрыты, поэтому я выдала новые. «Комон, бэйби, детки — конфетки».");return}S.tasks[i].done=true;pet("v",20);save();renderSide();say("Закрыто: «"+esc(S.tasks[i].t)+"». Вера в команду растёт.")});
 const NAG={f:"Копия проголодалась. Напоминаю: «Принимаю круассанами».",p:"Терпение на исходе. «А Баба-Яга против». Сдайте отчёт вовремя.",v:"Вера в команду падает. «Сиди, бобёр» уже не помогает: закройте хотя бы одну задачу."},nag={};
-setInterval(()=>{pet("f",-2);pet("p",-1);pet("v",-1.5);save();renderSide();for(const k in NAG){if(S.pet[k]<25&&!nag[k]){nag[k]=1;say(NAG[k])}else if(S.pet[k]>40)nag[k]=0}},4000);
 $("voice").addEventListener("click",e=>{VOICE=!VOICE;e.target.setAttribute("aria-pressed",VOICE);e.target.textContent="Голос: "+(VOICE?"вкл":"выкл");if(VOICE)speak("Здрасьте, забор покрасьте!");else try{speechSynthesis.cancel()}catch(x){}});
 
 $("f").addEventListener("submit",e=>{e.preventDefault();ask($("q").value);$("q").value=""});
