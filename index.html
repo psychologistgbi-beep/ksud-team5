@@ -116,8 +116,9 @@ function renderSide(){
 function say(html,who){const d=document.createElement("div");d.className="m "+(who||"a");d.innerHTML=html;$("log").appendChild(d);$("log").scrollTop=$("log").scrollHeight}
 
 function findKB(q){
-  const qs=stems(q);let best=null,bs=0;
-  for(const k of allKB()){const ks=stems(k.k+" "+k.t);let s=0;for(const w of qs)if(ks.includes(w))s++;if(s>bs){bs=s;best=k}}
+  const stop=["что","такое","когда","как","где","кто","это","про","мне","для","будет"];
+  const qs=stems(q).filter(w=>!stop.includes(w));let best=null,bs=0;
+  for(const k of S.kb.concat(KB0)){const ks=stems(k.k+" "+k.t);let s=0;for(const w of qs)if(ks.includes(w))s++;if(s>bs){bs=s;best=k}}
   return bs>0?best:null;
 }
 function answer(q){
