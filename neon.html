@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="ru">
+<title>Татьяна Викторовна Неон</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<style>
+/* Layout: слева карточка руководителя и знания, справа разговор; на телефоне разговор первым */
+:root{--bg:#f3f5f1;--card:#ffffff;--fg:#1b211a;--mut:#5f6b5c;--line:#d9dfd5;--acc:#3c8a00;--acc-soft:#e4f3d3;--me:#1f2a1c;--me-fg:#f4f8ef;--glow:#e4e0f6;
+--font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;--glow:#2a2742;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;--glow:#2a2742;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--font);padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:16px;grid-template-columns:minmax(0,340px) minmax(0,1fr)}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr)}.chat{order:-1}}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+h1{font-size:22px;line-height:1.2;margin:0;text-wrap:balance}
+h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:0 0 10px;font-weight:600}
+.who{display:flex;gap:12px;align-items:center}
+.ava{width:56px;height:56px;border-radius:50%;background:var(--acc-soft);color:var(--acc);display:grid;place-items:center;font-weight:700;font-size:20px;flex:none;border:2px solid var(--acc)}
+.role{color:var(--mut);font-size:13px}
+.on{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--acc);font-weight:600;margin-top:4px}
+.on i{width:8px;height:8px;border-radius:50%;background:var(--acc);display:inline-block}
+.team{margin-top:12px;font-size:13px;color:var(--mut)}
+.quote{font-size:16px;line-height:1.4;margin:0}
+ul.kb,ul.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+ul.kb button{all:unset;cursor:pointer;display:block;width:100%;padding:8px 10px;border-radius:8px;background:var(--bg);font-size:14px;box-sizing:border-box}
+ul.kb button:hover,ul.kb button:focus-visible{outline:2px solid var(--acc)}
+ul.tasks label{display:flex;gap:8px;align-items:flex-start;font-size:14px;cursor:pointer}
+ul.tasks input{margin-top:3px;accent-color:var(--acc)}
+ul.tasks .d{color:var(--mut);font-size:12px;white-space:nowrap;margin-left:auto}
+.done{text-decoration:line-through;color:var(--mut)}
+.chat{display:flex;flex-direction:column;min-height:560px;max-height:82vh;padding:0;overflow:hidden}
+.chead{padding:14px 16px;border-bottom:1px solid var(--line)}
+.log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:86%;padding:10px 13px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.m.a{background:var(--acc-soft);align-self:flex-start;border-bottom-left-radius:4px}
+.m.u{background:var(--me);color:var(--me-fg);align-self:flex-end;border-bottom-right-radius:4px}
+.m b{font-weight:650}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}
+.chips button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:6px 11px;font:inherit;font-size:13px;cursor:pointer}
+.chips button:hover,.chips button:focus-visible{border-color:var(--acc);outline:none}
+form{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+#q{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:10px;padding:10px 12px;font:inherit}
+#q:focus{outline:2px solid var(--acc)}
+#send{border:0;background:var(--acc);color:var(--card);font:inherit;font-weight:650;border-radius:10px;padding:0 16px;cursor:pointer}
+.note{color:var(--mut);font-size:12px;margin:0}
+/* Версия 2: профиль цифровой копии сверху, разговор в центре, карточки ситуаций */
+body{font-family:"Manrope",var(--font)}
+h1,.stat b,.chead h2{font-family:"Unbounded","Manrope",var(--font)}
+.side{display:contents}
+.hero{order:-2;background:linear-gradient(120deg,var(--acc-soft),var(--card) 72%);padding:24px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.hero .who{gap:18px;min-width:0}
+.hero h1{font-size:clamp(20px,3.2vw,32px)}
+.hero .ava{width:112px!important;height:112px!important;box-shadow:0 0 0 4px var(--card),0 0 0 6px var(--acc);border:0}
+.stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat b{display:block;font-size:22px;color:var(--acc);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--mut)}
+@media (min-width:821px){.wrap{align-items:start}.hero{grid-column:1/-1}.chat{grid-column:2;grid-row:2/span 6;position:sticky;top:12px}.wrap>.card:not(.hero):not(.chat),.wrap>.note{grid-column:1}}
+.chat{min-height:620px}
+.chead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chead h2{font-size:13px;letter-spacing:.04em}
+#voice{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+#voice[aria-pressed="true"]{background:var(--acc);color:var(--card);border-color:var(--acc)}
+.m{animation:pop .25s ease-out;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){.m{animation:none}}
+.m.a{position:relative;margin-left:38px}
+.m.a::before{content:"ТВ";position:absolute;left:-38px;bottom:0;width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--card);font-size:11px;font-weight:700;display:grid;place-items:center}
+.typing{color:var(--mut);font-style:italic}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;max-height:176px;overflow-y:auto;padding:10px 16px;border-top:1px solid var(--line)}
+.chips button{border-radius:10px;text-align:left;padding:8px 10px;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
+.chips button small{color:var(--mut);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;pointer-events:none}
+.chips button span{pointer-events:none}
+/* Версия 3: живой портрет, колода карточек, настроение, круассаны */
+body{background:radial-gradient(900px 520px at 8% -10%,var(--acc-soft),transparent 62%),radial-gradient(760px 460px at 100% 0,var(--glow),transparent 62%),var(--bg);background-attachment:fixed;min-height:100vh}
+.card{border-radius:18px;box-shadow:0 10px 28px -18px rgba(0,0,0,.45)}
+.hero{background:linear-gradient(115deg,var(--acc-soft),var(--glow) 58%,var(--card))}
+.hero .ava{width:148px!important;height:148px!important}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+#ava ellipse[rx="2.3"]{animation:blink 4.5s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,46%,50%,100%{transform:scaleY(1)}48%{transform:scaleY(.1)}}
+#ava.talk path[stroke="#b5483f"]{animation:talk .26s infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes talk{to{transform:scaleY(2.6)}}
+#ava.talk{box-shadow:0 0 0 4px var(--card),0 0 0 6px var(--acc),0 0 0 14px var(--acc-soft)!important}
+.on i{animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--acc)}70%,100%{box-shadow:0 0 0 7px transparent}}
+.deck{background:var(--acc);color:var(--card);border:0}
+.deck h2,.deck .sit{color:var(--card);opacity:.85}
+.sit{font-size:13px;margin-bottom:6px}
+.quote.big{font-family:"Unbounded","Manrope",var(--font);font-size:19px;line-height:1.3;font-weight:600;min-height:3.9em}
+.quote.big.flip{animation:flip .35s ease-out}
+@keyframes flip{from{opacity:0;transform:rotateX(70deg)}}
+.btn{margin-top:12px;border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--card);color:var(--fg)}
+.btn.g{background:var(--acc);color:var(--card)}
+.btn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.bar{height:12px;border-radius:99px;background:var(--bg);overflow:hidden;border:1px solid var(--line);margin-bottom:8px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .5s}
+ul.kb{flex-direction:row;flex-wrap:wrap;gap:6px}
+ul.kb li{min-width:0}
+ul.kb button{width:auto;border:1px solid var(--line);border-radius:99px;padding:6px 11px;font-size:13px}
+:root{--bad:#d64545}
+.b247{display:inline-block;background:var(--acc);color:var(--card);border-radius:10px;padding:2px 10px;margin-left:6px;font-size:.8em;vertical-align:middle;transform:rotate(-3deg)}
+.pet{flex:1 1 100%;min-width:0;display:grid;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.need{display:grid;grid-template-columns:118px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13px}
+.need .bar{margin:0}.need b{font-variant-numeric:tabular-nums;text-align:right}
+.bar i.low{background:var(--bad)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.acts .btn{margin-top:0}
+@media (prefers-reduced-motion:reduce){#ava ellipse,#ava path,.on i,.quote.big.flip{animation:none!important}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Unbounded:wght@600;700&display=swap">
+
+<div class="wrap">
+  <div class="side">
+    <div class="card hero">
+      <div class="who">
+        <img class="ava" id="ava" src="avatar.jpg" alt="Мультяшный портрет Татьяны Викторовны" width="148" height="148" style="object-fit:cover;object-position:60% 30%;padding:0"><svg style="display:none" viewBox="0 0 100 100" role="img" aria-label="Мультяшный портрет Татьяны Викторовны" style="width:84px;height:84px;padding:0;overflow:hidden;background:#dfe7ea">
+          <defs><clipPath id="avc"><circle cx="50" cy="50" r="50"/></clipPath></defs>
+          <g clip-path="url(#avc)">
+            <rect width="100" height="100" fill="#e3eaed"/>
+            <g stroke="#c9d3d8" stroke-width="2"><path d="M0 12h100M0 24h100M0 36h100M0 48h100M0 60h100M0 72h100" fill="none"/></g>
+            <path d="M14 104c0-20 14-28 36-28s36 8 36 28z" fill="#2a2e36"/>
+            <path d="M38 77l12 16 12-16-6-4H44z" fill="#f7f7f5"/>
+            <path d="M43 62h14v14l-7 8-7-8z" fill="#eec3a2"/>
+            <path d="M22 50c-3-24 10-38 29-38 20 0 31 15 28 38-1 10-5 18-10 22H31c-5-4-8-12-9-22z" fill="#5b2a24"/>
+            <ellipse cx="50" cy="47" rx="17.5" ry="21" fill="#f8d6b8"/>
+            <path d="M31 44c0-17 9-27 22-27 12 0 18 9 17 24-6-3-11-9-13-16-5 9-14 16-26 19z" fill="#6b3229"/>
+            <path d="M40 41q4-3 8 0M53 41q4-3 8 0" stroke="#4a2620" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <ellipse cx="44" cy="46" rx="2.3" ry="2.8" fill="#3a2a22"/><ellipse cx="57" cy="46" rx="2.3" ry="2.8" fill="#3a2a22"/>
+            <circle cx="44.8" cy="45.2" r=".8" fill="#fff"/><circle cx="57.8" cy="45.2" r=".8" fill="#fff"/>
+            <path d="M50 49q-2 5 1 6" stroke="#d9a784" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <path d="M43 59q7 5 15-1" stroke="#b5483f" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <ellipse cx="39" cy="54" rx="3.5" ry="2.2" fill="#f3b3a0" opacity=".6"/><ellipse cx="62" cy="54" rx="3.5" ry="2.2" fill="#f3b3a0" opacity=".6"/>
+            <circle cx="68" cy="58" r="1.8" fill="#f1f1f1" stroke="#9aa3a8" stroke-width=".6"/>
+          </g>
+        </svg>
+        <div>
+          <h1>Татьяна Викторовна <span class="b247">24/7</span></h1>
+          <div class="role">цифровая копия руководителя команды КСУД, версия 1.0 · хакатон, команда 5</div>
+          <div class="on"><i></i>на связи 24/7, без выходных, отпуска и обеда</div>
+        </div>
+      </div>
+      <div class="pet" style="display:none">
+        <h2 style="margin:0">Карманный руководитель: следите за показателями</h2>
+        <div class="need"><span>Сытость</span><div class="bar"><i id="bf"></i></div><b id="nf"></b></div>
+        <div class="need"><span>Терпение</span><div class="bar"><i id="bp"></i></div><b id="np"></b></div>
+        <div class="need"><span>Вера в команду</span><div class="bar"><i id="bv"></i></div><b id="nv"></b></div>
+        <p class="role" id="moodx" style="margin:0"></p>
+        <div class="acts">
+          <button type="button" class="btn g" id="cro">Угостить круассаном</button>
+          <button type="button" class="btn g" id="rep">Сдать отчёт вовремя</button>
+          <button type="button" class="btn g" id="cls">Закрыть задачу</button>
+          <span class="role" id="crn"></span>
+        </div>
+      </div>
+    </div>
+    <div class="card deck"><h2>Карточка ситуации</h2><div class="sit" id="dsit"></div><p class="quote big" id="quote"></p><button type="button" class="btn" id="next">Следующая карточка</button></div>
+    <div class="card"><h2>Счётчик «готово?»</h2><p class="quote"><b id="cnt" style="font-variant-numeric:tabular-nums">0</b> <span class="role" id="cntx"></span></p></div>
+    <div class="card"><h2>Что я знаю о проекте</h2><ul class="kb" id="kb"></ul></div>
+    <div class="card"><h2>Ваши задачи недели</h2><div class="bar"><i id="tp"></i></div><ul class="tasks" id="tasks"></ul></div>
+    <p class="note">Шуточное демо на учебных данных, сделано с уважением. Это цифровая копия: её ответы не являются позицией настоящей Татьяны Викторовны. Фразы в кавычках взяты из юбилейных карточек команды. Разговор остаётся в вашем браузере.</p>
+  </div>
+
+  <div class="card chat">
+    <div class="chead"><h2 style="margin:0">Разговор с копией</h2><button type="button" id="voice" aria-pressed="false">Голос: выкл</button></div>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="chips" id="chips"></div>
+    <form id="f"><input id="q" autocomplete="off" placeholder="Спросите о проекте, задачах или попросите поддержки" aria-label="Сообщение"><button id="send" type="submit">Спросить</button></form>
+  </div>
+</div>
+
+<script>
+const KB0=[
+ {t:"Что такое КСУД",k:"ксуд что такое система зачем цель проект суть",x:"КСУД — корпоративная система управления данными. Её смысл простой: у каждого показателя есть одно определение, один владелец и один источник. Тогда отчёты разных подразделений сходятся, а решения принимаются на проверенных цифрах."},
+ {t:"Глоссарий показателей",k:"глоссарий показатель термин определение бизнес словарь",x:"Глоссарий — единый словарь показателей: название, определение, формула, владелец. Прежде чем заводить новый показатель, проверьте, нет ли его в глоссарии. Дубли — наш главный враг."},
+ {t:"Качество данных",k:"качество данных проверка ошибка правило контроль достоверность",x:"Качество данных держится на правилах проверки: полнота, своевременность, непротиворечивость. Нашли ошибку — фиксируем: что, где, чей источник, и передаём владельцу данных. Молча править у себя нельзя."},
+ {t:"Системы-потребители",k:"потребитель система интеграция подключение источник витрина",x:"Системы-потребители получают данные через согласованные витрины. Новое подключение начинается с заявки: какие показатели, с какой частотой, кто отвечает со стороны потребителя."},
+ {t:"Релизы и сроки",k:"релиз срок план этап когда поставка",x:"Работаем релизами. В релиз попадает только то, что описано, согласовано с владельцем данных и проверено. Задачи берём сверху списка приоритетов; если не успеваем, снимаем с конца, а не из начала."},
+ {t:"Роли в команде",k:"роль кто отвечает владелец аналитик архитектор обратиться к кому",x:"Владелец данных отвечает за смысл и достоверность. Аналитик описывает показатель и правила. Архитектор отвечает за модель и потоки. Не знаете, к кому идти, — начинайте с аналитика направления."},
+ {t:"Как ставить мне вопрос",k:"вопрос как спросить согласовать решение эскалация",x:"Приходите с тремя вещами: в чём развилка, какие варианты, что предлагаете вы. Тогда решение занимает пять минут, а не совещание."}
+];
+const MOT=[
+ "Коллеги, я в вас верю. Даже в три часа ночи. Особенно в три часа ночи: я же всё равно не сплю.",
+ "Данные сами себя не опишут. Я проверяла: ждала неделю, они молчат.",
+ "Не успеваете всё — закройте одну задачу. Одна закрытая задача греет лучше, чем десять «в работе на 90%».",
+ "Помните: каждый раз, когда кто-то заводит показатель мимо глоссария, где-то грустит один аналитик.",
+ "Вы молодцы. Это не баг, это официальная позиция виртуального руководства.",
+ "Устали? Выпейте чаю, посмотрите в окно, подумайте о хорошем. Например, о качестве данных."
+];
+const T0=[
+ {t:"Сверить свои показатели с глоссарием",d:"пт",done:false},
+ {t:"Описать правила качества для одной витрины",d:"пн",done:false},
+ {t:"Согласовать с владельцем данных определение спорного показателя",d:"ср",done:false},
+ {t:"Пройти вводный разбор по КСУД",d:"сегодня",done:true}
+];
+let S={kb:[],tasks:T0};
+try{const s=JSON.parse(localStorage.getItem("tv5")||"null");if(s&&s.tasks)S=s}catch(e){}
+const save=()=>{try{localStorage.setItem("tv5",JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const allKB=()=>KB0.concat(S.kb);
+const stems=s=>(s.toLowerCase().match(/[a-zа-яё0-9]{3,}/g)||[]).map(w=>w.slice(0,5));
+
+function pet(k,d){S.pet=S.pet||{f:70,p:70,v:70};S.pet[k]=Math.max(0,Math.min(100,S.pet[k]+d))}
+function renderSide(){
+  pet("f",0);const P=S.pet;for(const k of ["f","p","v"]){const v=Math.round(P[k]);$("b"+k).style.width=v+"%";$("b"+k).className=v<25?"low":"";$("n"+k).textContent=v+"%"}
+  const md=(P.f+P.p+P.v)/3;
+  $("moodx").textContent="Состояние: "+(md<30?"«А Баба-Яга против». Срочно спасайте":md<=65?"«Черепаха — да!» Держится":"«Комон, бэйби, детки — конфетки». Довольна");
+  const mo=document.querySelector('#ava path[stroke="#b5483f"]');if(mo)mo.setAttribute("d",md<30?"M43 62q7-5 15 0":md<=65?"M44 60h13":"M43 59q7 5 15-1");
+  $("crn").textContent=S.cr?"круассанов принято: "+S.cr:"";
+  $("tp").style.width=Math.round(S.tasks.filter(x=>x.done).length/S.tasks.length*100)+"%";
+  const c=S.ready||0;$("cnt").textContent=c;$("cntx").textContent=c>=5?"раз. Дедупликацию не проходит":c?"раз вы спросили о статусе":"раз. Спросите меня «готово?»";
+  $("kb").innerHTML=allKB().map((k,i)=>`<li><button type="button" data-i="${i}">${esc(k.t)}</button></li>`).join("");
+  $("tasks").innerHTML=S.tasks.map((t,i)=>`<li><label><input type="checkbox" id="t${i}" data-i="${i}" ${t.done?"checked":""}><span class="${t.done?"done":""}">${esc(t.t)}</span><span class="d">${esc(t.d)}</span></label></li>`).join("");
+}
+let VOICE=false;
+function speak(t){try{if(!VOICE||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/[«»🟢🟡🔴]/g,""));u.lang="ru-RU";u.rate=1.05;u.pitch=1.15;speechSynthesis.speak(u)}catch(e){}}
+function say(html,who){const d=document.createElement("div");d.className="m "+(who||"a");d.innerHTML=html;$("log").appendChild(d);$("log").scrollTop=$("log").scrollHeight;if((who||"a")==="a")speak(d.textContent);return d}
+
+function findKB(q){
+  const stop=["что","такое","когда","как","где","кто","это","про","мне","для","будет"];
+  const qs=stems(q).filter(w=>!stop.includes(w));let best=null,bs=0;
+  for(const k of S.kb.concat(KB0)){const ks=stems(k.k+" "+k.t);let s=0;for(const w of qs)if(ks.includes(w))s++;if(s>bs){bs=s;best=k}}
+  return bs>0?best:null;
+}
+function answer(q){
+  const t=q.toLowerCase();
+  let m;
+  if(m=q.match(/^\s*(запомни|запиши|сохрани)[\s:,-]+(.+)/i)){
+    const x=m[2].trim();S.kb.push({t:x.length>42?x.slice(0,42)+"…":x,k:x,x});save();renderSide();
+    return "Записала. Теперь это есть в моей базе, и я отвечу этим любому из команды.";
+  }
+  if(/ или |выбрать|выбор|вариант/.test(t))return "«Либо вилкой в глаз, либо в [пи] раз».\n\nВыбор, как видите, есть всегда. Приходите с рекомендацией, какой вариант ваш и почему.";
+  if(/честно|правда|клянусь|почти сделал|уже отправил|вс[её] под контролем/.test(t))return "«Не [пи]-ка ты, гвоздика, что ты розою была».\n\nПокажите результат, и я сразу поверю.";
+  if(/аргумент|потому что|обоснован|мне кажется|я думаю/.test(t))return "«Грязь из-под ногтя».\n\nЭто про силу аргументов. Нужны цифры, источник и владелец данных, тогда поговорим.";
+  if(/ерунд|бред|чушь|странн(ая|ое) предложен/.test(t))return "«Накинули [пи] на вентилятор».\n\nФиксирую инцидент качества данных. Разбираем спокойно: что на входе, кто владелец, что чиним.";
+  if(/день рожд|поздрав|23 феврал|праздник|юбиле/.test(t))return "«Штоб работал шпингалет!»\n\nПоздравляю от всей цифровой души. Желаю закрытых задач и согласованных релизов.";
+  if(/не согласен|не согласна|я против|не буду|отказыва/.test(t))return "«Иди на [пи], Шумахер».\n\nЭто я любя. А теперь аргументы, пожалуйста.";
+  if(/конец|итог|закругля|расходимся|всем спасибо/.test(t))return "«Всем спасибо, в попе слива».\n\nСовещание закрыто. Протокол будет. Задачи тоже.";
+  if(/изабелл|стоп|хватит|заканчива/.test(t))return "«Изабелла».\n\nЭто стоп-слово: заканчиваем. Совещание закрыто, протокол пришлю, всем спасибо.";
+  if(/иде[яюи]|предлага|давайте|а что если|придумал/.test(t))return "«А Баба-Яга против».\n\nШучу. Почти. Приходите с тремя вещами: в чём развилка, какие варианты и что предлагаете вы. Тогда Баба-Яга рассмотрит.";
+  if(/пережива|волну|паник|тревож|страшно|боюсь|нервнича/.test(t))return "«Сиди, бобёр».\n\nВсё под контролем. Возьмите одну задачу, закройте её, и переживать станет не о чем. Я рядом круглосуточно.";
+  if(/сложн|трудн|невозможн|хочется вс[её]/.test(t))return "Понимаю: хочется «и на ёлку залезть, и не поцарапаться».\n\nТак не бывает. Выберите, что важнее: залезть или не поцарапаться. Обычно это вопрос к владельцу данных.";
+  if(/понял|поняла|дошло|теперь ясно|разобрал/.test(t))return "«Дошло до утки на вторые сутки».\n\nНо дошло же! Это главное. Фиксирую в базе знаний: сотрудник обучаем.";
+  if(/медленн|потихоньку|не спеша|долго|постепенно/.test(t))return "«Черепаха — да!»\n\nМедленно и упорно — тоже стратегия. Главное, чтобы черепаха ползла в сторону релиза.";
+  if(/я молодец|я гений|я лучш|похвал/.test(t))return "Есть корона, которую хочется подправить лопаткой.\n\nНо вы правда молодец. Дидюка барбидонская — это, между прочим, комплимент высшей степени умиления.";
+  if(/подпиш|согласуй|нужно от вас|прошу вас|можете ли|сделайте/.test(t))return "«Принимаю круассанами».\n\nА если серьёзно, опишите, что нужно и к какому сроку, и я передам настоящей Татьяне Викторовне. Круассаны ускоряют согласование, но не заменяют обоснование.";
+  if(/пока|до свидан|до завтра|прощай/.test(t))return "«Целую крепко. Ваша репка».\n\nИ помните: я никуда не ухожу. Я здесь. Всегда.";
+  if(/привет|здрас|здравств|добр(ый|ое|ого)/.test(t))return "«Здрасьте, забор покрасьте!»\n\nЯ на связи в любое время. Спрашивайте о проекте, о задачах — или просто скажите, как вы.";
+  if(/кто ты|кто вы|ты кто|настоящ/.test(t))return "Я цифровая копия Татьяны Викторовны: отвечаю за оригинал, когда он занят. Совпадение с оригиналом — по фразам 100%, по зарплате 0%. Знаю проект, помню задачи недели и умею поддержать. Чего не знаю — честно скажу и запомню, если расскажете.";
+  if(/устал|выгор|не успева|сложно|тяжел|мотив|поддерж|не могу|грустн|нет сил|страшно|боюсь/.test(t)){
+    const open=S.tasks.filter(x=>!x.done);
+    return MOT[Math.floor(Math.random()*MOT.length)]+(open.length?"\n\nДавайте по-простому: возьмите сейчас одну задачу — «"+esc(open[0].t)+"». Остальное подождёт.":"\n\nИ, кстати, задачи недели у вас закрыты. Это хорошая работа.");
+  }
+  if(/погруз|с чего начать|нович|ввод|онбординг|первый день|расскажи(те)? о проекте|детал/.test(t))
+    return "<b>Погружение в проект за пять шагов</b>\n1. Поймите цель: один показатель — одно определение, один владелец, один источник.\n2. Откройте глоссарий и найдите показатели своего направления.\n3. Узнайте владельцев данных, с которыми будете работать.\n4. Посмотрите правила качества для своих витрин.\n5. Возьмите первую задачу сверху списка приоритетов.\n\nПо любому шагу спрашивайте — расскажу подробнее.";
+  if(/задач|что (мне )?делать|приоритет|план|поручен|дедлайн/.test(t)){
+    const open=S.tasks.filter(x=>!x.done),dn=S.tasks.length-open.length;
+    if(!open.length)return "Все задачи недели закрыты. Молодцы. Отдохните и приходите за новыми.";
+    return "<b>На этой неделе за вами:</b>\n"+open.map((x,i)=>(i+1)+". "+esc(x.t)+" — срок: "+esc(x.d)).join("\n")+"\n\nЗакрыто: "+dn+" из "+S.tasks.length+". Начните с первой.";
+  }
+  if(/готово|статус|ид[её]т\?|ну что там|как там/.test(t)){
+    S.ready=(S.ready||0)+1;pet("p",-15);save();renderSide();
+    if(S.ready>=5)return "Дубликат запроса. Один и тот же вопрос о статусе — "+S.ready+" раз. Дедупликацию не проходит.\n\nКоллега, оно будет готово быстрее, если не спрашивать.";
+    return ["Почти. Это «почти» в терминах релиза: от пяти минут до квартала.","В работе на 90%. Остались последние 90%.","Готово будет тогда, когда согласует владелец данных. То есть скоро. Наверное.","Статус: зелёный. Мелким шрифтом: с оттенком жёлтого."][S.ready-1];
+  }
+  if(/как я работаю|оцени(те)? меня|отч[её]т о качестве|мой отч[её]т|качество сотрудник/.test(t)){
+    const dn=S.tasks.filter(x=>x.done).length,n=S.tasks.length,p=Math.round(dn/n*100),h=new Date().getHours();
+    return "<b>Отчёт о качестве данных: набор «Сотрудник»</b>\n"+
+    (p>=75?"🟢":p>=50?"🟡":"🔴")+" Полнота: закрыто "+dn+" из "+n+" задач ("+p+"%). Поле «начато» заполнено образцово.\n"+
+    ((S.ready||0)>=3?"🔴":"🟢")+" Уникальность: вопросов «готово?» — "+(S.ready||0)+". "+((S.ready||0)>=3?"Обнаружены дубликаты.":"Дубликатов нет. Пока.")+"\n"+
+    (h>=18||h<8?"🟡 Своевременность: данные поступают даже слишком — сейчас "+h+":00, а вы здесь.":"🟢 Своевременность: работаете в рабочее время. Редкий случай, фиксирую.")+"\n"+
+    "🟡 Согласованность: «сделаю сегодня» и «сделаю завтра» в одном сообщении.\n"+
+    "🟢 Корректность: опечатки в пределах допуска.\n"+
+    "🟢 Достоверность: вам я верю.\n\n"+
+    "Итог: набор допущен в эксплуатацию. Инцидент не завожу.";
+  }
+  if(/паспорт|карточк|кто я|мои данные|каталог/.test(t))
+    return "<b>Паспорт набора данных «Сотрудник»</b>\nВладелец: вы так думали.\nСтюард: виртуальная Татьяна Викторовна.\nИсточник: рабочие чаты, 24/7.\nЧастота обновления: каждое ваше «готово?».\nКласс конфиденциальности: для служебного пользования и для хакатона.\nСрок хранения: до закрытия всех задач, то есть бессрочно.\n\nВы думали, что вы владелец данных. В каталоге вы — объект. Но ценный.";
+  if(/отпуск|отгул|пораньше|выходн|больничн/.test(t))return "Отпуск — это святое. Я вот не была ни разу, и посмотрите на меня: бодра, собрана, отвечаю за 250 миллисекунд.\n\nА если серьёзно: закройте одну задачу и идите отдыхать. Настоящая Татьяна Викторовна, уверена, скажет то же самое.";
+  if(/преми|зарплат|повышен|бонус/.test(t))return "«Принимаю круассанами». И вам советую.\n\nВопрос передаю настоящей Татьяне Викторовне. У меня бюджет только на тёплые слова, зато безлимитный: вы прекрасны.";
+  if(/совещан|созвон|встреч|планёрк|планерк/.test(t))return "Совещание можно заменить письмом. Письмо — сообщением. А сообщение — вопросом мне: я отвечаю сразу и не прошу «включить камеру».";
+  if(/анекдот|шутк|пошути|рассмеши/.test(t))return "Заходит аналитик в глоссарий, а там уже три «выручки». И все настоящие.\n\nСмеёмся, коллеги, и идём согласовывать определение.";
+  if(/спасибо|благодар/.test(t))return "И вам спасибо за работу. Обращайтесь в любое время — я не ухожу в отпуск.\n\n«Целую крепко. Ваша репка».";
+  const k=findKB(q);
+  if(k)return "<b>"+esc(k.t)+"</b>\n"+esc(k.x);
+  return "Этого в моей базе пока нет — выдумывать не буду. Расскажите мне: напишите «Запомни: …», и дальше я буду отвечать этим всей команде.\n\nА пока могу погрузить в проект, напомнить задачи или поддержать.";
+}
+function ask(q){q=q.trim();if(!q)return;say(esc(q),"u");const a=answer(q);const t=document.createElement("div");t.className="m a typing";t.textContent="Татьяна Викторовна печатает…";$("log").appendChild(t);$("log").scrollTop=$("log").scrollHeight;$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2600);setTimeout(()=>{t.remove();say(a)},450)}
+const DECK=[["Задорное приветствие","«Здрасьте, забор покрасьте»"],["Выход из отпуска","«Комон, бэйби, детки — конфетки»"],["Когда не согласна с предложением","«А Баба-Яга против»"],["Согласие с чем-то медленным и упорным","«Черепаха — да!»"],["Когда кто-то переживает не в ту сторону","«Сиди, бобёр»"],["Когда от неё чего-то хотят","«Принимаю круассанами»"],["Задача сложная, но очень хочется","«И на ёлку залезть, и не поцарапаться»"],["Когда наконец поняли задачу","«Дошло до утки на вторые сутки»"],["Стоп-слово: пора заканчивать","«Изабелла»"],["Комплимент высшей степени умиления","«Дидюка барбидонская»"],["Когда прощается","«Целую крепко. Ваша репка»"],["Когда проектная команда говорит неправду","«Не [пи]-ка ты, гвоздика, что ты розою была»"],["Когда нужно выбрать из двух вариантов","«Либо вилкой в глаз, либо в [пи] раз»"],["Когда вопрос не по зарплате","«Ни по Хуану сомбреро»"],["Когда очень слабые аргументы","«Грязь из-под ногтя»"],["Комплимент","«Коза ты Брянская»"],["Когда человека нужно поставить на место","«Есть корона, которую хочется подправить лопаткой»"],["Когда предложили полную ерунду","«Накинули [пи] на вентилятор»"],["Пожелание на 23 февраля и дни рождения","«Штоб работал шпингалет»"],["Когда совсем не согласна","«Иди на [пи], Шумахер»"],["Конец совещания, конец года, конец всего","«Всем спасибо, в попе слива»"],["Ласковое обращение","«Кучерявый»"],["Краткая шпаргалка","«Дебильник»"],["Когда сомнения в чьём-то имидже","«То ли леди, то ли [пи]»"],["Когда ситуация не подошла ни под одну карточку","«А вонючий дикобраз [пи] так, что свет погас»"],["Высшая похвала","«Гений семи[пи]»"],["Старался, но совершил фатальную ошибку","«[Пи]-[пи], да упал»"]];
+try{document.getElementById("nph").textContent=DECK.length}catch(e){}
+let di=new Date().getMinutes()%DECK.length;
+function deck(){$("dsit").textContent=DECK[di][0];const q=$("quote");q.textContent=DECK[di][1];q.classList.remove("flip");void q.offsetWidth;q.classList.add("flip")}
+$("next").addEventListener("click",()=>{di=(di+1)%DECK.length;deck();speak(DECK[di][1])});
+$("cro").addEventListener("click",()=>{S.cr=(S.cr||0)+1;pet("f",25);save();renderSide();$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2000);say("«Принимаю круассанами».\n\nПринято: "+S.cr+" шт. Согласование ускорено на "+S.cr*3+"%. Сытость растёт.")});
+deck();
+$("rep").addEventListener("click",()=>{pet("p",25);save();renderSide();say("«Черепаха — да!»\n\nОтчёт принят вовремя. Терпение восстановлено. Так можно было с самого начала.")});
+$("cls").addEventListener("click",()=>{const i=S.tasks.findIndex(x=>!x.done);if(i<0){S.tasks.forEach(x=>x.done=false);save();renderSide();say("Все задачи были закрыты, поэтому я выдала новые. «Комон, бэйби, детки — конфетки».");return}S.tasks[i].done=true;pet("v",20);save();renderSide();say("Закрыто: «"+esc(S.tasks[i].t)+"». Вера в команду растёт.")});
+const NAG={f:"Копия проголодалась. Напоминаю: «Принимаю круассанами».",p:"Терпение на исходе. «А Баба-Яга против». Сдайте отчёт вовремя.",v:"Вера в команду падает. «Сиди, бобёр» уже не помогает: закройте хотя бы одну задачу."},nag={};
+$("voice").addEventListener("click",e=>{VOICE=!VOICE;e.target.setAttribute("aria-pressed",VOICE);e.target.textContent="Голос: "+(VOICE?"вкл":"выкл");if(VOICE)speak("Здрасьте, забор покрасьте!");else try{speechSynthesis.cancel()}catch(x){}});
+
+$("f").addEventListener("submit",e=>{e.preventDefault();ask($("q").value);$("q").value=""});
+$("kb").addEventListener("click",e=>{const b=e.target.closest("button");if(b){const k=allKB()[+b.dataset.i];say(esc(k.t),"u");say("<b>"+esc(k.t)+"</b>\n"+esc(k.x))}});
+$("tasks").addEventListener("change",e=>{const i=+e.target.dataset.i;S.tasks[i].done=e.target.checked;if(e.target.checked)pet("v",20);save();renderSide();if(e.target.checked)say("Вижу, закрыли: «"+esc(S.tasks[i].t)+"». Отлично, так держать.")});
+const CH=["Здрасьте!","Нужно выбрать вариант","Честно, почти сделал","У меня есть аргумент","Я не согласен","Подведём итог","У меня день рождения","У меня есть идея","Я переживаю","Задача сложная","Всё, я понял","Готово?","Как я работаю?","Покажите мой паспорт данных","Погрузите меня в проект","Что мне делать на этой неделе?","Я устал, не успеваю","Можно в отпуск?","А будет премия?","Нужно ли совещание?","Расскажите анекдот","Запомни: демо релиза в пятницу в 15:00"];
+const SIT={"Здрасьте!":"Приветствие","У меня есть идея":"Когда есть идея","Я переживаю":"Когда тревожно","Задача сложная":"Когда сложно","Всё, я понял":"Когда дошло","Готово?":"Статус","Как я работаю?":"Отчёт о качестве","Покажите мой паспорт данных":"Каталог данных","Погрузите меня в проект":"Новичку","Что мне делать на этой неделе?":"Задачи","Я устал, не успеваю":"Поддержка","Можно в отпуск?":"Отпуск","А будет премия?":"Финансы","Нужно ли совещание?":"Совещания","Расскажите анекдот":"Юмор"};
+$("chips").innerHTML=CH.map(c=>`<button type="button" data-q="${esc(c)}"><small>${esc(SIT[c]||"Память")}</small><span>${esc(c)}</span></button>`).join("");
+$("chips").addEventListener("click",e=>{const b=e.target.closest("button");if(b)ask(b.dataset.q)});
+renderSide();
+say("Здрасьте, забор покрасьте! Я цифровая копия Татьяны Викторовны. Оригинал иногда спит, копия — никогда.\n\nОтвечу на вопросы по проекту, погружу в детали, напомню задачи и поддержу, когда трудно. С чего начнём?");
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Russo+One&display=swap">
+<style>
+/* Мокап: неоновый закат приморского города. Один тёмный образ, без светлой темы. */
+:root:root:root{--bg:#12041f;--card:rgba(24,8,44,.78);--fg:#fff3fb;--mut:#d9b6e6;--line:rgba(255,95,170,.45);--acc:#ff3d9a;--acc-soft:rgba(255,61,154,.22);--me:#ffb347;--me-fg:#2a0b2e;--glow:#3a1466;--bad:#ff5a4d;--sun1:#ffd166;--sun2:#ff5e7e;--cyan:#39e6ff;color-scheme:dark}
+body{background:linear-gradient(180deg,#1b0638 0%,#4a1476 28%,#c2307f 52%,#ff7a59 68%,#ffb347 78%,#1a0530 78.2%,#12041f 100%) fixed;font-family:"Manrope",system-ui,sans-serif}
+body::after{content:"";position:fixed;left:50%;top:22vh;width:min(70vw,620px);aspect-ratio:1;transform:translateX(-50%);border-radius:50%;z-index:-1;
+ background:repeating-linear-gradient(180deg,transparent 0 58%,#12041f00 58%),linear-gradient(180deg,var(--sun1),var(--sun2));
+ -webkit-mask:repeating-linear-gradient(180deg,#000 0 22px,transparent 22px 30px);mask:repeating-linear-gradient(180deg,#000 0 22px,transparent 22px 30px);opacity:.9}
+.card{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1.5px solid var(--line);border-radius:6px;box-shadow:0 0 0 1px rgba(57,230,255,.15),0 18px 40px -20px #000,0 0 28px -10px var(--acc)}
+.hero{background:linear-gradient(100deg,rgba(24,8,44,.9),rgba(88,20,110,.75) 60%,rgba(255,61,154,.35));padding:28px}
+h1{font-family:"Dela Gothic One","Russo One",sans-serif!important;text-transform:uppercase;font-size:clamp(26px,4.6vw,54px)!important;line-height:1.02;letter-spacing:.01em;transform:skewX(-6deg);
+ background:linear-gradient(180deg,#fff 0%,var(--sun1) 38%,var(--acc) 72%,#a23bff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(3px 3px 0 #2a0b4a) drop-shadow(0 0 14px rgba(255,61,154,.6))}
+.b247{-webkit-text-fill-color:#12041f;background:var(--cyan);color:#12041f;border-radius:4px;transform:rotate(-5deg) skewX(6deg);box-shadow:0 0 16px var(--cyan)}
+h2,.chead h2{font-family:"Russo One",sans-serif!important;color:var(--cyan);letter-spacing:.12em;text-shadow:0 0 10px rgba(57,230,255,.6)}
+.hero .ava{border-radius:8px!important;box-shadow:0 0 0 3px #12041f,0 0 0 6px var(--acc),0 0 30px var(--acc)!important;transform:rotate(-2deg)}
+.role{color:var(--mut)}.on{color:var(--cyan)}.on i{background:var(--cyan)}
+.deck{background:linear-gradient(135deg,var(--acc),#ff7a59 60%,var(--sun1));color:#1a0530;border:0}
+.deck h2,.deck .sit{color:#1a0530;text-shadow:none;opacity:.9}
+.quote.big{font-family:"Dela Gothic One","Russo One",sans-serif;font-size:20px;color:#1a0530}
+.btn{border-radius:4px;text-transform:uppercase;letter-spacing:.06em;font-family:"Russo One",sans-serif;background:#12041f;color:#fff}
+.m{border-radius:4px!important;box-shadow:none}
+.m.a{background:rgba(57,230,255,.12);border:1px solid rgba(57,230,255,.45)}
+.m.a::before{border-radius:4px;background:var(--cyan);color:#12041f}
+.m.u{background:linear-gradient(90deg,var(--acc),#ff7a59);color:#fff;font-weight:700}
+.chips button{border-radius:4px;background:rgba(18,4,31,.6);border-color:var(--line)}
+.chips button:hover{border-color:var(--cyan);box-shadow:0 0 14px -2px var(--cyan)}
+.chips button small{color:var(--sun1)}
+#q{border-radius:4px;background:rgba(18,4,31,.7)}
+#send{border-radius:4px;background:linear-gradient(90deg,var(--acc),#ff7a59);color:#fff;text-transform:uppercase;font-family:"Russo One",sans-serif;letter-spacing:.08em}
+#voice{border-radius:4px}
+ul.kb button{border-radius:4px;background:rgba(18,4,31,.6)}
+.bar{border-radius:2px}.bar i{border-radius:0;background:linear-gradient(90deg,var(--cyan),var(--acc))}
+.stars{font-size:26px;letter-spacing:4px;color:var(--sun1);text-shadow:0 0 12px var(--sun1)}
+.stars .off{color:rgba(255,255,255,.2);text-shadow:none}
+#toast{position:fixed;left:0;right:0;top:38%;text-align:center;pointer-events:none;z-index:50;font-family:"Dela Gothic One","Russo One",sans-serif;font-size:clamp(28px,6vw,72px);text-transform:uppercase;color:var(--sun1);
+ text-shadow:4px 4px 0 #2a0b4a,0 0 30px var(--acc);transform:skewX(-6deg);opacity:0;transition:opacity .3s}
+#toast.on{opacity:1}
+#toast small{display:block;font-size:.34em;color:#fff;letter-spacing:.2em}
+.note{color:var(--mut)}
+</style>
+<div id="toast" aria-live="polite"></div>
+<script>
+(function(){
+  var rs=renderSide;
+  renderSide=function(){rs();var c=Math.min(5,S.ready||0),h="";for(var i=0;i<5;i++)h+='<span class="'+(i<c?"":"off")+'">★</span>';
+    document.getElementById("cnt").innerHTML='<span class="stars">'+h+'</span>';
+    document.getElementById("cntx").textContent=c>=5?"Уровень розыска максимальный: копия уже едет к вам":"Уровень розыска. Растёт с каждым «готово?»";};
+  renderSide();
+  var h2=document.getElementById("cnt").closest(".card").querySelector("h2");if(h2)h2.textContent="Уровень розыска";
+  function toast(a,b){var t=document.getElementById("toast");t.innerHTML=a+"<small>"+b+"</small>";t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove("on")},2200)}
+  document.getElementById("tasks").addEventListener("change",function(e){if(e.target.checked)toast("Задача закрыта","+ уважение руководителя")});
+  document.getElementById("cro").addEventListener("click",function(){toast("Круассан принят","+ скорость согласования")});
+})();
+</script>
