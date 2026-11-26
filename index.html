@@ -293,8 +293,12 @@ const DECK=[["Задорное приветствие","«Здрасьте, за
 let di=new Date().getMinutes()%DECK.length;
 function deck(){$("dsit").textContent=DECK[di][0];const q=$("quote");q.textContent=DECK[di][1];q.classList.remove("flip");void q.offsetWidth;q.classList.add("flip")}
 $("next").addEventListener("click",()=>{di=(di+1)%DECK.length;deck();speak(DECK[di][1])});
-$("cro").addEventListener("click",()=>{S.cr=(S.cr||0)+1;pet("f",25);save();renderSide();$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2000);say("«Принимаю круассанами».\n\nПринято: "+S.cr+" шт. Согласование ускорено на "+S.cr*3+"%. Настроение оригинала растёт.")});
+$("cro").addEventListener("click",()=>{S.cr=(S.cr||0)+1;pet("f",25);save();renderSide();$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2000);say("«Принимаю круассанами».\n\nПринято: "+S.cr+" шт. Согласование ускорено на "+S.cr*3+"%. Сытость растёт.")});
 deck();
+$("rep").addEventListener("click",()=>{pet("p",25);save();renderSide();say("«Черепаха — да!»\n\nОтчёт принят вовремя. Терпение восстановлено. Так можно было с самого начала.")});
+$("cls").addEventListener("click",()=>{const i=S.tasks.findIndex(x=>!x.done);if(i<0){S.tasks.forEach(x=>x.done=false);save();renderSide();say("Все задачи были закрыты, поэтому я выдала новые. «Комон, бэйби, детки — конфетки».");return}S.tasks[i].done=true;pet("v",20);save();renderSide();say("Закрыто: «"+esc(S.tasks[i].t)+"». Вера в команду растёт.")});
+const NAG={f:"Копия проголодалась. Напоминаю: «Принимаю круассанами».",p:"Терпение на исходе. «А Баба-Яга против». Сдайте отчёт вовремя.",v:"Вера в команду падает. «Сиди, бобёр» уже не помогает: закройте хотя бы одну задачу."},nag={};
+setInterval(()=>{pet("f",-2);pet("p",-1);pet("v",-1.5);save();renderSide();for(const k in NAG){if(S.pet[k]<25&&!nag[k]){nag[k]=1;say(NAG[k])}else if(S.pet[k]>40)nag[k]=0}},4000);
 $("voice").addEventListener("click",e=>{VOICE=!VOICE;e.target.setAttribute("aria-pressed",VOICE);e.target.textContent="Голос: "+(VOICE?"вкл":"выкл");if(VOICE)speak("Здрасьте, забор покрасьте!");else try{speechSynthesis.cancel()}catch(x){}});
 
 $("f").addEventListener("submit",e=>{e.preventDefault();ask($("q").value);$("q").value=""});
