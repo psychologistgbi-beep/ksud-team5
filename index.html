@@ -116,7 +116,7 @@ ul.kb button{width:auto;border:1px solid var(--line);border-radius:99px;padding:
   <div class="side">
     <div class="card hero">
       <div class="who">
-        <svg class="ava" id="ava" viewBox="0 0 100 100" role="img" aria-label="Мультяшный портрет Татьяны Викторовны" style="width:84px;height:84px;padding:0;overflow:hidden;background:#dfe7ea">
+        <img class="ava" id="ava" src="avatar.jpg" alt="Мультяшный портрет Татьяны Викторовны" width="148" height="148" style="object-fit:cover;object-position:60% 30%;padding:0"><svg style="display:none" viewBox="0 0 100 100" role="img" aria-label="Мультяшный портрет Татьяны Викторовны" style="width:84px;height:84px;padding:0;overflow:hidden;background:#dfe7ea">
           <defs><clipPath id="avc"><circle cx="50" cy="50" r="50"/></clipPath></defs>
           <g clip-path="url(#avc)">
             <rect width="100" height="100" fill="#e3eaed"/>
@@ -215,6 +215,7 @@ function renderSide(){
   pet("f",0);const P=S.pet;for(const k of ["f","p","v"]){const v=Math.round(P[k]);$("b"+k).style.width=v+"%";$("b"+k).className=v<25?"low":"";$("n"+k).textContent=v+"%"}
   const md=(P.f+P.p+P.v)/3;
   $("moodx").textContent="Состояние: "+(md<30?"«А Баба-Яга против». Срочно спасайте":md<=65?"«Черепаха — да!» Держится":"«Комон, бэйби, детки — конфетки». Довольна");
+  $("ava").style.filter=md<30?"grayscale(.85)":md<=65?"saturate(.8)":"";
   const mo=document.querySelector('#ava path[stroke="#b5483f"]');if(mo)mo.setAttribute("d",md<30?"M43 62q7-5 15 0":md<=65?"M44 60h13":"M43 59q7 5 15-1");
   $("crn").textContent=S.cr?"круассанов принято: "+S.cr:"";
   $("tp").style.width=Math.round(S.tasks.filter(x=>x.done).length/S.tasks.length*100)+"%";
