@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+<title>Татьяна Викторовна 24/7</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<style>
+/* Layout: слева карточка руководителя и знания, справа разговор; на телефоне разговор первым */
+:root{--bg:#f3f5f1;--card:#ffffff;--fg:#1b211a;--mut:#5f6b5c;--line:#d9dfd5;--acc:#3c8a00;--acc-soft:#e4f3d3;--me:#1f2a1c;--me-fg:#f4f8ef;
+--font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141813;--card:#1d231b;--fg:#e9efe5;--mut:#9aa795;--line:#30392d;--acc:#9be14a;--acc-soft:#27361c;--me:#9be14a;--me-fg:#12180e;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--font);padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:16px;grid-template-columns:minmax(0,340px) minmax(0,1fr)}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr)}.chat{order:-1}}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+h1{font-size:22px;line-height:1.2;margin:0;text-wrap:balance}
+h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:0 0 10px;font-weight:600}
+.who{display:flex;gap:12px;align-items:center}
+.ava{width:56px;height:56px;border-radius:50%;background:var(--acc-soft);color:var(--acc);display:grid;place-items:center;font-weight:700;font-size:20px;flex:none;border:2px solid var(--acc)}
+.role{color:var(--mut);font-size:13px}
+.on{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--acc);font-weight:600;margin-top:4px}
+.on i{width:8px;height:8px;border-radius:50%;background:var(--acc);display:inline-block}
+.team{margin-top:12px;font-size:13px;color:var(--mut)}
+.quote{font-size:16px;line-height:1.4;margin:0}
+ul.kb,ul.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+ul.kb button{all:unset;cursor:pointer;display:block;width:100%;padding:8px 10px;border-radius:8px;background:var(--bg);font-size:14px;box-sizing:border-box}
+ul.kb button:hover,ul.kb button:focus-visible{outline:2px solid var(--acc)}
+ul.tasks label{display:flex;gap:8px;align-items:flex-start;font-size:14px;cursor:pointer}
+ul.tasks input{margin-top:3px;accent-color:var(--acc)}
+ul.tasks .d{color:var(--mut);font-size:12px;white-space:nowrap;margin-left:auto}
+.done{text-decoration:line-through;color:var(--mut)}
+.chat{display:flex;flex-direction:column;min-height:560px;max-height:82vh;padding:0;overflow:hidden}
+.chead{padding:14px 16px;border-bottom:1px solid var(--line)}
+.log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:86%;padding:10px 13px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.m.a{background:var(--acc-soft);align-self:flex-start;border-bottom-left-radius:4px}
+.m.u{background:var(--me);color:var(--me-fg);align-self:flex-end;border-bottom-right-radius:4px}
+.m b{font-weight:650}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}
+.chips button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:6px 11px;font:inherit;font-size:13px;cursor:pointer}
+.chips button:hover,.chips button:focus-visible{border-color:var(--acc);outline:none}
+form{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+#q{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:10px;padding:10px 12px;font:inherit}
+#q:focus{outline:2px solid var(--acc)}
+#send{border:0;background:var(--acc);color:var(--card);font:inherit;font-weight:650;border-radius:10px;padding:0 16px;cursor:pointer}
+.note{color:var(--mut);font-size:12px;margin:0}
+</style>
+
+<div class="wrap">
+  <div class="side">
+    <div class="card">
+      <div class="who">
+        <div class="ava">ТВ</div>
+        <div>
+          <h1>Татьяна Викторовна</h1>
+          <div class="role">виртуальный руководитель команды КСУД</div>
+          <div class="on"><i></i>на связи 24/7, без выходных, отпуска и обеда</div>
+        </div>
+      </div>
+      <div class="team">Хакатон КСУД, 26.11.2026 · <b>Команда 5</b></div>
+    </div>
+    <div class="card"><h2>Слово руководителя на сегодня</h2><p class="quote" id="quote"></p></div>
+    <div class="card"><h2>Что я знаю о проекте</h2><ul class="kb" id="kb"></ul></div>
+    <div class="card"><h2>Ваши задачи недели</h2><ul class="tasks" id="tasks"></ul></div>
+    <p class="note">Шуточное демо на учебных данных, сделано с уважением. Это виртуальный помощник: его ответы не являются позицией настоящей Татьяны Викторовны. Разговор остаётся в вашем браузере.</p>
+  </div>
+
+  <div class="card chat">
+    <div class="chead"><h2 style="margin:0">Разговор с руководителем</h2></div>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="chips" id="chips"></div>
+    <form id="f"><input id="q" autocomplete="off" placeholder="Спросите о проекте, задачах или попросите поддержки" aria-label="Сообщение"><button id="send" type="submit">Спросить</button></form>
+  </div>
+</div>
+
+<script>
+const KB0=[
+ {t:"Что такое КСУД",k:"ксуд что такое система зачем цель проект суть",x:"КСУД — корпоративная система управления данными. Её смысл простой: у каждого показателя есть одно определение, один владелец и один источник. Тогда отчёты разных подразделений сходятся, а решения принимаются на проверенных цифрах."},
+ {t:"Глоссарий показателей",k:"глоссарий показатель термин определение бизнес словарь",x:"Глоссарий — единый словарь показателей: название, определение, формула, владелец. Прежде чем заводить новый показатель, проверьте, нет ли его в глоссарии. Дубли — наш главный враг."},
+ {t:"Качество данных",k:"качество данных проверка ошибка правило контроль достоверность",x:"Качество данных держится на правилах проверки: полнота, своевременность, непротиворечивость. Нашли ошибку — фиксируем: что, где, чей источник, и передаём владельцу данных. Молча править у себя нельзя."},
+ {t:"Системы-потребители",k:"потребитель система интеграция подключение источник витрина",x:"Системы-потребители получают данные через согласованные витрины. Новое подключение начинается с заявки: какие показатели, с какой частотой, кто отвечает со стороны потребителя."},
+ {t:"Релизы и сроки",k:"релиз срок план этап когда поставка",x:"Работаем релизами. В релиз попадает только то, что описано, согласовано с владельцем данных и проверено. Задачи берём сверху списка приоритетов; если не успеваем, снимаем с конца, а не из начала."},
+ {t:"Роли в команде",k:"роль кто отвечает владелец аналитик архитектор обратиться к кому",x:"Владелец данных отвечает за смысл и достоверность. Аналитик описывает показатель и правила. Архитектор отвечает за модель и потоки. Не знаете, к кому идти, — начинайте с аналитика направления."},
+ {t:"Как ставить мне вопрос",k:"вопрос как спросить согласовать решение эскалация",x:"Приходите с тремя вещами: в чём развилка, какие варианты, что предлагаете вы. Тогда решение занимает пять минут, а не совещание."}
+];
+const MOT=[
+ "Коллеги, я в вас верю. Даже в три часа ночи. Особенно в три часа ночи: я же всё равно не сплю.",
+ "Данные сами себя не опишут. Я проверяла: ждала неделю, они молчат.",
+ "Не успеваете всё — закройте одну задачу. Одна закрытая задача греет лучше, чем десять «в работе на 90%».",
+ "Помните: каждый раз, когда кто-то заводит показатель мимо глоссария, где-то грустит один аналитик.",
+ "Вы молодцы. Это не баг, это официальная позиция виртуального руководства.",
+ "Устали? Выпейте чаю, посмотрите в окно, подумайте о хорошем. Например, о качестве данных."
+];
+const T0=[
+ {t:"Сверить свои показатели с глоссарием",d:"пт",done:false},
+ {t:"Описать правила качества для одной витрины",d:"пн",done:false},
+ {t:"Согласовать с владельцем данных определение спорного показателя",d:"ср",done:false},
+ {t:"Пройти вводный разбор по КСУД",d:"сегодня",done:true}
+];
+let S={kb:[],tasks:T0};
+try{const s=JSON.parse(localStorage.getItem("tv5")||"null");if(s&&s.tasks)S=s}catch(e){}
+const save=()=>{try{localStorage.setItem("tv5",JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const allKB=()=>KB0.concat(S.kb);
+const stems=s=>(s.toLowerCase().match(/[a-zа-яё0-9]{3,}/g)||[]).map(w=>w.slice(0,5));
+
+function renderSide(){
+  $("quote").textContent=MOT[new Date().getDate()%MOT.length];
+  $("kb").innerHTML=allKB().map((k,i)=>`<li><button type="button" data-i="${i}">${esc(k.t)}</button></li>`).join("");
+  $("tasks").innerHTML=S.tasks.map((t,i)=>`<li><label><input type="checkbox" id="t${i}" data-i="${i}" ${t.done?"checked":""}><span class="${t.done?"done":""}">${esc(t.t)}</span><span class="d">${esc(t.d)}</span></label></li>`).join("");
+}
+function say(html,who){const d=document.createElement("div");d.className="m "+(who||"a");d.innerHTML=html;$("log").appendChild(d);$("log").scrollTop=$("log").scrollHeight}
+
+function findKB(q){
+  const qs=stems(q);let best=null,bs=0;
+  for(const k of allKB()){const ks=stems(k.k+" "+k.t);let s=0;for(const w of qs)if(ks.includes(w))s++;if(s>bs){bs=s;best=k}}
+  return bs>0?best:null;
+}
+function answer(q){
+  const t=q.toLowerCase();
+  let m;
+  if(m=q.match(/^\s*(запомни|запиши|сохрани)[\s:,-]+(.+)/i)){
+    const x=m[2].trim();S.kb.push({t:x.length>42?x.slice(0,42)+"…":x,k:x,x});save();renderSide();
+    return "Записала. Теперь это есть в моей базе, и я отвечу этим любому из команды.";
+  }
+  if(/привет|здравств|добр(ый|ое|ого)/.test(t))return "Здравствуйте! Я на связи в любое время. Спрашивайте о проекте, о задачах — или просто скажите, как вы.";
+  if(/кто ты|кто вы|ты кто|настоящ/.test(t))return "Я виртуальный руководитель: отвечаю за Татьяну Викторовну, когда она занята. Знаю проект, помню задачи недели и умею поддержать. Чего не знаю — честно скажу и запомню, если расскажете.";
+  if(/устал|выгор|не успева|сложно|тяжел|мотив|поддерж|не могу|грустн|нет сил|страшно|боюсь/.test(t)){
+    const open=S.tasks.filter(x=>!x.done);
+    return MOT[Math.floor(Math.random()*MOT.length)]+(open.length?"\n\nДавайте по-простому: возьмите сейчас одну задачу — «"+esc(open[0].t)+"». Остальное подождёт.":"\n\nИ, кстати, задачи недели у вас закрыты. Это хорошая работа.");
+  }
+  if(/погруз|с чего начать|нович|ввод|онбординг|первый день|расскажи(те)? о проекте|детал/.test(t))
+    return "<b>Погружение в проект за пять шагов</b>\n1. Поймите цель: один показатель — одно определение, один владелец, один источник.\n2. Откройте глоссарий и найдите показатели своего направления.\n3. Узнайте владельцев данных, с которыми будете работать.\n4. Посмотрите правила качества для своих витрин.\n5. Возьмите первую задачу сверху списка приоритетов.\n\nПо любому шагу спрашивайте — расскажу подробнее.";
+  if(/задач|что (мне )?делать|приоритет|план|поручен|дедлайн/.test(t)){
+    const open=S.tasks.filter(x=>!x.done),dn=S.tasks.length-open.length;
+    if(!open.length)return "Все задачи недели закрыты. Молодцы. Отдохните и приходите за новыми.";
+    return "<b>На этой неделе за вами:</b>\n"+open.map((x,i)=>(i+1)+". "+esc(x.t)+" — срок: "+esc(x.d)).join("\n")+"\n\nЗакрыто: "+dn+" из "+S.tasks.length+". Начните с первой.";
+  }
+  if(/отпуск|отгул|пораньше|выходн|больничн/.test(t))return "Отпуск — это святое. Я вот не была ни разу, и посмотрите на меня: бодра, собрана, отвечаю за 250 миллисекунд.\n\nА если серьёзно: закройте одну задачу и идите отдыхать. Настоящая Татьяна Викторовна, уверена, скажет то же самое.";
+  if(/преми|зарплат|повышен|бонус/.test(t))return "Отличный вопрос! Передаю его настоящей Татьяне Викторовне. У меня бюджет только на тёплые слова, зато безлимитный: вы прекрасны.";
+  if(/совещан|созвон|встреч|планёрк|планерк/.test(t))return "Совещание можно заменить письмом. Письмо — сообщением. А сообщение — вопросом мне: я отвечаю сразу и не прошу «включить камеру».";
+  if(/анекдот|шутк|пошути|рассмеши/.test(t))return "Заходит аналитик в глоссарий, а там уже три «выручки». И все настоящие.\n\nСмеёмся, коллеги, и идём согласовывать определение.";
+  if(/спасибо|благодар/.test(t))return "И вам спасибо за работу. Обращайтесь в любое время — я не ухожу в отпуск.";
+  const k=findKB(q);
+  if(k)return "<b>"+esc(k.t)+"</b>\n"+esc(k.x);
+  return "Этого в моей базе пока нет — выдумывать не буду. Расскажите мне: напишите «Запомни: …», и дальше я буду отвечать этим всей команде.\n\nА пока могу погрузить в проект, напомнить задачи или поддержать.";
+}
+function ask(q){q=q.trim();if(!q)return;say(esc(q),"u");setTimeout(()=>say(answer(q)),250)}
+
+$("f").addEventListener("submit",e=>{e.preventDefault();ask($("q").value);$("q").value=""});
+$("kb").addEventListener("click",e=>{const b=e.target.closest("button");if(b){const k=allKB()[+b.dataset.i];say(esc(k.t),"u");say("<b>"+esc(k.t)+"</b>\n"+esc(k.x))}});
+$("tasks").addEventListener("change",e=>{const i=+e.target.dataset.i;S.tasks[i].done=e.target.checked;save();renderSide();if(e.target.checked)say("Вижу, закрыли: «"+esc(S.tasks[i].t)+"». Отлично, так держать.")});
+const CH=["Погрузите меня в проект","Что мне делать на этой неделе?","Я устал, не успеваю","Можно в отпуск?","А будет премия?","Нужно ли совещание?","Расскажите анекдот","Запомни: демо релиза в пятницу в 15:00"];
+$("chips").innerHTML=CH.map(c=>`<button type="button">${esc(c)}</button>`).join("");
+$("chips").addEventListener("click",e=>{if(e.target.tagName==="BUTTON")ask(e.target.textContent)});
+renderSide();
+say("Здравствуйте, коллега! Я виртуальная Татьяна Викторовна. Настоящая иногда спит, я — никогда.\n\nОтвечу на вопросы по проекту, погружу в детали, напомню задачи и поддержу, когда трудно. С чего начнём?");
+</script>
