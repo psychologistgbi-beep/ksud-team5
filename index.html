@@ -101,6 +101,13 @@ body{background:radial-gradient(900px 520px at 8% -10%,var(--acc-soft),transpare
 ul.kb{flex-direction:row;flex-wrap:wrap;gap:6px}
 ul.kb li{min-width:0}
 ul.kb button{width:auto;border:1px solid var(--line);border-radius:99px;padding:6px 11px;font-size:13px}
+:root{--bad:#d64545}
+.pet{flex:1 1 100%;min-width:0;display:grid;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.need{display:grid;grid-template-columns:118px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13px}
+.need .bar{margin:0}.need b{font-variant-numeric:tabular-nums;text-align:right}
+.bar i.low{background:var(--bad)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.acts .btn{margin-top:0}
 @media (prefers-reduced-motion:reduce){#ava ellipse,#ava path,.on i,.quote.big.flip{animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Unbounded:wght@600;700&display=swap">
@@ -142,9 +149,21 @@ ul.kb button{width:auto;border:1px solid var(--line);border-radius:99px;padding:
         <div class="stat"><b>0 ₽</b><span>зарплата копии</span></div>
         <div class="stat"><b>№ 5</b><span>команда, хакатон КСУД</span></div>
       </div>
+      <div class="pet">
+        <h2 style="margin:0">Карманный руководитель: следите за показателями</h2>
+        <div class="need"><span>Сытость</span><div class="bar"><i id="bf"></i></div><b id="nf"></b></div>
+        <div class="need"><span>Терпение</span><div class="bar"><i id="bp"></i></div><b id="np"></b></div>
+        <div class="need"><span>Вера в команду</span><div class="bar"><i id="bv"></i></div><b id="nv"></b></div>
+        <p class="role" id="moodx" style="margin:0"></p>
+        <div class="acts">
+          <button type="button" class="btn g" id="cro">Угостить круассаном</button>
+          <button type="button" class="btn g" id="rep">Сдать отчёт вовремя</button>
+          <button type="button" class="btn g" id="cls">Закрыть задачу</button>
+          <span class="role" id="crn"></span>
+        </div>
+      </div>
     </div>
     <div class="card deck"><h2>Карточка ситуации</h2><div class="sit" id="dsit"></div><p class="quote big" id="quote"></p><button type="button" class="btn" id="next">Следующая карточка</button></div>
-    <div class="card"><h2>Настроение оригинала</h2><div class="bar"><i id="mood"></i></div><p class="role" id="moodx" style="margin:0"></p><button type="button" class="btn g" id="cro">Угостить круассаном</button> <span class="role" id="crn"></span></div>
     <div class="card"><h2>Счётчик «готово?»</h2><p class="quote"><b id="cnt" style="font-variant-numeric:tabular-nums">0</b> <span class="role" id="cntx"></span></p></div>
     <div class="card"><h2>Что я знаю о проекте</h2><ul class="kb" id="kb"></ul></div>
     <div class="card"><h2>Ваши задачи недели</h2><div class="bar"><i id="tp"></i></div><ul class="tasks" id="tasks"></ul></div>
@@ -191,10 +210,13 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const allKB=()=>KB0.concat(S.kb);
 const stems=s=>(s.toLowerCase().match(/[a-zа-яё0-9]{3,}/g)||[]).map(w=>w.slice(0,5));
 
+function pet(k,d){S.pet=S.pet||{f:70,p:70,v:70};S.pet[k]=Math.max(0,Math.min(100,S.pet[k]+d))}
 function renderSide(){
-  const md=Math.max(0,Math.min(100,S.mood==null?70:S.mood));$("mood").style.width=md+"%";
-  $("moodx").textContent=md+"% — "+(md<30?"«А Баба-Яга против»":md<=70?"«Черепаха — да!»":"«Комон, бэйби, детки — конфетки»");
-  $("crn").textContent=S.cr?"принято круассанов: "+S.cr:"";
+  pet("f",0);const P=S.pet;for(const k of ["f","p","v"]){const v=Math.round(P[k]);$("b"+k).style.width=v+"%";$("b"+k).className=v<25?"low":"";$("n"+k).textContent=v+"%"}
+  const md=(P.f+P.p+P.v)/3;
+  $("moodx").textContent="Состояние: "+(md<30?"«А Баба-Яга против». Срочно спасайте":md<=65?"«Черепаха — да!» Держится":"«Комон, бэйби, детки — конфетки». Довольна");
+  const mo=document.querySelector('#ava path[stroke="#b5483f"]');if(mo)mo.setAttribute("d",md<30?"M43 62q7-5 15 0":md<=65?"M44 60h13":"M43 59q7 5 15-1");
+  $("crn").textContent=S.cr?"круассанов принято: "+S.cr:"";
   $("tp").style.width=Math.round(S.tasks.filter(x=>x.done).length/S.tasks.length*100)+"%";
   const c=S.ready||0;$("cnt").textContent=c;$("cntx").textContent=c>=5?"раз. Дедупликацию не проходит":c?"раз вы спросили о статусе":"раз. Спросите меня «готово?»";
   $("kb").innerHTML=allKB().map((k,i)=>`<li><button type="button" data-i="${i}">${esc(k.t)}</button></li>`).join("");
@@ -240,7 +262,7 @@ function answer(q){
     return "<b>На этой неделе за вами:</b>\n"+open.map((x,i)=>(i+1)+". "+esc(x.t)+" — срок: "+esc(x.d)).join("\n")+"\n\nЗакрыто: "+dn+" из "+S.tasks.length+". Начните с первой.";
   }
   if(/готово|статус|ид[её]т\?|ну что там|как там/.test(t)){
-    S.ready=(S.ready||0)+1;S.mood=Math.max(0,(S.mood==null?70:S.mood)-10);save();renderSide();
+    S.ready=(S.ready||0)+1;pet("p",-15);save();renderSide();
     if(S.ready>=5)return "Дубликат запроса. Один и тот же вопрос о статусе — "+S.ready+" раз. Дедупликацию не проходит.\n\nКоллега, оно будет готово быстрее, если не спрашивать.";
     return ["Почти. Это «почти» в терминах релиза: от пяти минут до квартала.","В работе на 90%. Остались последние 90%.","Готово будет тогда, когда согласует владелец данных. То есть скоро. Наверное.","Статус: зелёный. Мелким шрифтом: с оттенком жёлтого."][S.ready-1];
   }
@@ -271,13 +293,13 @@ const DECK=[["Задорное приветствие","«Здрасьте, за
 let di=new Date().getMinutes()%DECK.length;
 function deck(){$("dsit").textContent=DECK[di][0];const q=$("quote");q.textContent=DECK[di][1];q.classList.remove("flip");void q.offsetWidth;q.classList.add("flip")}
 $("next").addEventListener("click",()=>{di=(di+1)%DECK.length;deck();speak(DECK[di][1])});
-$("cro").addEventListener("click",()=>{S.cr=(S.cr||0)+1;S.mood=Math.min(100,(S.mood==null?70:S.mood)+10);save();renderSide();$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2000);say("«Принимаю круассанами».\n\nПринято: "+S.cr+" шт. Согласование ускорено на "+S.cr*3+"%. Настроение оригинала растёт.")});
+$("cro").addEventListener("click",()=>{S.cr=(S.cr||0)+1;pet("f",25);save();renderSide();$("ava").classList.add("talk");clearTimeout(ask.tm);ask.tm=setTimeout(()=>$("ava").classList.remove("talk"),2000);say("«Принимаю круассанами».\n\nПринято: "+S.cr+" шт. Согласование ускорено на "+S.cr*3+"%. Настроение оригинала растёт.")});
 deck();
 $("voice").addEventListener("click",e=>{VOICE=!VOICE;e.target.setAttribute("aria-pressed",VOICE);e.target.textContent="Голос: "+(VOICE?"вкл":"выкл");if(VOICE)speak("Здрасьте, забор покрасьте!");else try{speechSynthesis.cancel()}catch(x){}});
 
 $("f").addEventListener("submit",e=>{e.preventDefault();ask($("q").value);$("q").value=""});
 $("kb").addEventListener("click",e=>{const b=e.target.closest("button");if(b){const k=allKB()[+b.dataset.i];say(esc(k.t),"u");say("<b>"+esc(k.t)+"</b>\n"+esc(k.x))}});
-$("tasks").addEventListener("change",e=>{const i=+e.target.dataset.i;S.tasks[i].done=e.target.checked;if(e.target.checked)S.mood=Math.min(100,(S.mood==null?70:S.mood)+10);save();renderSide();if(e.target.checked)say("Вижу, закрыли: «"+esc(S.tasks[i].t)+"». Отлично, так держать.")});
+$("tasks").addEventListener("change",e=>{const i=+e.target.dataset.i;S.tasks[i].done=e.target.checked;if(e.target.checked)pet("v",20);save();renderSide();if(e.target.checked)say("Вижу, закрыли: «"+esc(S.tasks[i].t)+"». Отлично, так держать.")});
 const CH=["Здрасьте!","У меня есть идея","Я переживаю","Задача сложная","Всё, я понял","Готово?","Как я работаю?","Покажите мой паспорт данных","Погрузите меня в проект","Что мне делать на этой неделе?","Я устал, не успеваю","Можно в отпуск?","А будет премия?","Нужно ли совещание?","Расскажите анекдот","Запомни: демо релиза в пятницу в 15:00"];
 const SIT={"Здрасьте!":"Приветствие","У меня есть идея":"Когда есть идея","Я переживаю":"Когда тревожно","Задача сложная":"Когда сложно","Всё, я понял":"Когда дошло","Готово?":"Статус","Как я работаю?":"Отчёт о качестве","Покажите мой паспорт данных":"Каталог данных","Погрузите меня в проект":"Новичку","Что мне делать на этой неделе?":"Задачи","Я устал, не успеваю":"Поддержка","Можно в отпуск?":"Отпуск","А будет премия?":"Финансы","Нужно ли совещание?":"Совещания","Расскажите анекдот":"Юмор"};
 $("chips").innerHTML=CH.map(c=>`<button type="button" data-q="${esc(c)}"><small>${esc(SIT[c]||"Память")}</small><span>${esc(c)}</span></button>`).join("");
